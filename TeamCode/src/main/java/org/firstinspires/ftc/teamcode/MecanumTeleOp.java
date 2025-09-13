@@ -49,9 +49,9 @@ public class MecanumTeleOp extends LinearOpMode {
             double rx = gamepad1.right_stick_x;
 
             if(gamepad1.left_bumper){
-                y*=.3;
-                x*=.3;
-                rx*=.3;
+                y *=.3;
+                x *=.3;
+                rx *=.3;
             }
             else if(gamepad1.right_bumper){
 
