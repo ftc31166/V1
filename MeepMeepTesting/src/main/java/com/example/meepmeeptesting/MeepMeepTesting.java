@@ -31,11 +31,16 @@ public class MeepMeepTesting {
                         .build());
 
         Image img = null;
-        try { img = ImageIO.read(new File("C:\\Users\\Dheem\\Documents\\image.png")); }
+        try { img = ImageIO.read(new File("\\Users\\chenchuvsegu\\Downloads\\Decode.png")); }
         catch(IOException e) {}
 
         meepMeep.setBackground(img)
                 .addEntity(myBot)
                 .start();
+//        meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)
+//                .setDarkMode(true)
+//                .setBackgroundAlpha(0.95f)
+//                .addEntity(myBot)
+//                .start();
     }
 }

@@ -31,7 +31,7 @@ public class detect {
                         .build());
 
         Image img = null;
-        try { img = ImageIO.read(new File("C:\\Users\\Dheem\\Documents\\image.png")); }
+        try { img = ImageIO.read(new File("/Users/chenchuvsegu/Downloads/Decode.png")); }
         catch(IOException e) {}
 
         meepMeep.setBackground(img)
