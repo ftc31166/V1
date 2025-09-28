@@ -20,17 +20,13 @@ public class MotorTest extends LinearOpMode {
             }if(gamepad1.b){
                 motor.setPower(0);
             }
-            if(gamepad1.dpad_right){
+            if(gamepad1.dpad_right&&timer.milliseconds()>300){
                power += .1;
-                if(timer.milliseconds()<300){
-
-                }
+               timer.reset();
             }
-            if(gamepad1.dpad_left){
+            if(gamepad1.dpad_left&&timer.milliseconds()>300){
                 power -= .1;
-                if(timer.milliseconds()<300){
-
-                }
+                timer.reset();
             }
 
 
