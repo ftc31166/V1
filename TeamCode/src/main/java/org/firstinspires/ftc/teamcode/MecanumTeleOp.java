@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp
@@ -18,7 +20,8 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("bl");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("fr");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("br");
-
+        DcMotor turretMotor = hardwareMap.dcMotor.get("tm");
+        Servo turretServo = hardwareMap.servo.get("tr");
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
@@ -30,6 +33,7 @@ public class MecanumTeleOp extends LinearOpMode {
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
@@ -60,6 +64,16 @@ public class MecanumTeleOp extends LinearOpMode {
                 x *= 0.8;
                 y *= 0.8;
                 rx *= 0.8;
+            }
+            if (gamepad1.dpad_up){
+                turretServo.setPosition(0);
+            } else if (gamepad1.dpad_down) {
+                turretServo.setPosition(1);
+            }
+            if (gamepad1.dpad_right){
+                turretMotor.setPower(0.8);
+            } else if (gamepad1.dpad_left) {
+                turretMotor.setPower(0);
             }
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
