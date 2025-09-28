@@ -72,7 +72,8 @@ public class MecanumTeleOp extends LinearOpMode {
             }
             if (gamepad1.dpad_right){
                 turretMotor.setPower(0.8);
-            } else if (gamepad1.dpad_left) {
+            }
+            else if (gamepad1.dpad_left) {
                 turretMotor.setPower(0);
             }
             // This button choice was made so that it is hard to hit on accident,
