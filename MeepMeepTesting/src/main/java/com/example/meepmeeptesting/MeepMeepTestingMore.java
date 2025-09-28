@@ -1,6 +1,7 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.rowlandhall.meepmeep.MeepMeep;
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder;
@@ -12,7 +13,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class MeepMeepTesting {
+public class MeepMeepTestingMore {
     public static void main(String[] args) {
         // blue1: heading = 0, x=-50, y=-49
         // red1: heading = 0, x=-50, y=49
@@ -23,26 +24,32 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(60, -10, 3.14159))
-                        .splineToLinearHeading(new Pose2d(35, -29, Math.toRadians(270)), Math.toRadians(-180))
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-45, -45, Math.toRadians(-90)))
+                        .back(10)
+                        .splineToConstantHeading(new Vector2d(-12, -29), Math.toRadians(-10))
                         .waitSeconds(1)
                         .forward(5)
                         .waitSeconds(1)
                         .forward(5)
                         .waitSeconds(1)
-                        .back(25)
-                        .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(225)), Math.toRadians(-180))
-                        .forward(65)
+                        .back(10)
+                        .splineToConstantHeading(new Vector2d(-45, -45), Math.toRadians(180))
                         .waitSeconds(2)
-                        .back(65)
-                        .splineToLinearHeading(new Pose2d(-24, 54, Math.toRadians(0)), Math.toRadians(50))
+                        .splineToLinearHeading(new Pose2d(0, -17, Math.toRadians(180)), Math.toRadians(270))
+                        .lineToSplineHeading(new Pose2d(22, -17, Math.toRadians(0)))
+                        .lineTo(new Vector2d(23, -53))
                         .waitSeconds(1)
-                        .strafeRight(5)
+                        .strafeLeft(6)
                         .waitSeconds(1)
-                        .strafeRight(5)
+                        .strafeLeft(6)
                         .waitSeconds(1)
-                        .splineToLinearHeading(new Pose2d(-42, -50, Math.toRadians(225)), Math.toRadians(-50))
-                        .splineToLinearHeading(new Pose2d(50, -35, Math.toRadians(225)), Math.toRadians(200))
+                        .strafeLeft(15)
+                        .splineToConstantHeading(new Vector2d(0, -20), Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(-42, -42), Math.toRadians(90))
+                        .waitSeconds(2)
+                        .strafeLeft(15)
+                        .splineToLinearHeading(new Pose2d(24, -29, Math.toRadians(180)), Math.toRadians(-27))
+                        .strafeLeft(10)
                         .build());
 
         Image img = null;
