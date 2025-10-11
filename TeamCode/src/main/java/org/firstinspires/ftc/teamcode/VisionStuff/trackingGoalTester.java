@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import com.acmerobotics.dashboard.FtcDashboard;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -24,7 +26,7 @@ public class trackingGoalTester extends LinearOpMode {
     double tiltPos = 0.5;
 
     // Gain factor (adjust sensitivity)
-    double kP = 0.001;
+    double kP = 0.0005;
 
     // Camera intrinsics (approximate for Logitech C270)
     double fx = 600;
@@ -35,7 +37,7 @@ public class trackingGoalTester extends LinearOpMode {
     double tagsize = 0.166; // meters (change to your tag size)
 
     // The specific AprilTag ID we want to track
-    int targetTagID = 24;
+    int targetTagID = 20;
 
     @Override
     public void runOpMode() {
@@ -49,7 +51,7 @@ public class trackingGoalTester extends LinearOpMode {
         camera.setPipeline(aprilTagDetectionPipeline);
 
         panServo = hardwareMap.get(Servo.class, "pan");
-        tiltServo = hardwareMap.get(Servo.class, "tilt");
+//        tiltServo = hardwareMap.get(Servo.class, "tilt");
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -66,6 +68,9 @@ public class trackingGoalTester extends LinearOpMode {
                 telemetry.update();
             }
         });
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboard.startCameraStream(camera, 0);
+
 
         telemetry.setMsTransmissionInterval(50);
 
@@ -76,10 +81,15 @@ public class trackingGoalTester extends LinearOpMode {
 
             if (detections.size() > 0) {
                 for (AprilTagDetection tag : detections) {
+
+                    telemetry.addData("Detected ID", tag.id);
+                    telemetry.addData("Center", "(%.2f, %.2f)", tag.center.x, tag.center.y);
+                    telemetry.addData("Distance (m)", tag.pose.z);
+
                     if (tag.id == targetTagID) {
                         // Get tag center (in pixels)
                         double tagX = tag.center.x;
-                        double tagY = tag.center.y;
+//                        double tagY = tag.center.y;
 
                         // Screen center
                         double centerX = 640 / 2.0;
@@ -87,22 +97,28 @@ public class trackingGoalTester extends LinearOpMode {
 
                         // Error
                         double errorX = tagX - centerX;
-                        double errorY = tagY - centerY;
+//                        double errorY = tagY - centerY;
 
                         // Adjust servo positions TODO: fix this based on servo turning
                         panPos -= errorX * kP;
-                        tiltPos += errorY * kP;
+//                        tiltPos += errorY * kP;
 
                         // Constrain between 0 and 1
                         panPos = Math.max(0, Math.min(1, panPos));
-                        tiltPos = Math.max(0, Math.min(1, tiltPos));
+//                        tiltPos = Math.max(0, Math.min(1, tiltPos));
 
                         panServo.setPosition(panPos);
-                        tiltServo.setPosition(tiltPos);
+//                        tiltServo.setPosition(tiltPos);
 
                         telemetry.addData("Tracking Tag ID", tag.id);
                         telemetry.addData("Pan Pos", panPos);
-                        telemetry.addData("Tilt Pos", tiltPos);
+//                        telemetry.addData("Tilt Pos", tiltPos);
+                        telemetry.addData("Center", 320);
+                        telemetry.addData("tagcenter", tagX);
+                        telemetry.addData("error", errorX);
+                        telemetry.addData("kP", kP);
+                        telemetry.addData("Delta", kP*errorX);
+
                     }
                 }
             } else {
