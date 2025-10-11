@@ -7,4 +7,10 @@ public class Constants {
         public static final double yTurretMin = .85;//highest angle
 
     }
+    public static class intake{
+        public static final double rollerSpeed = .5;
+        public static final double transferSpeed = 0.25;//lowest angle
+        public static final double yTurretMin = .85;//highest angle
+
+    }
 }

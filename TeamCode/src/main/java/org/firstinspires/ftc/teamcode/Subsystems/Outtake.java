@@ -28,22 +28,22 @@ public class Outtake {
         if (tag == null) return; // nothing to track
 
         // Image center (assuming 640x480)
-        double centerX = 320;
+//        double centerX = 320;
         double centerY = 240;
 
         // Calculate error from center
-        double errorX = tag.center.x - centerX;
+//        double errorX = tag.center.x - centerX;
         double errorY = tag.center.y - centerY;
 
         // Update servo positions (0.0 to 1.0)
-        double newPan = xturret.getPosition() - errorX * kP;
+//        double newPan = xturret.getPosition() - errorX * kP;
         double newTilt = yturret.getPosition() + errorY * kP;
 
         // Clamp positions to 0-1 range
-        newPan = Math.max(0, Math.min(1, newPan));
+//        newPan = Math.max(0, Math.min(1, newPan));
         newTilt = Math.max(0, Math.min(1, newTilt));
 
-        xturret.setPosition(newPan);
+//        xturret.setPosition(newPan);
         yturret.setPosition(newTilt);
     }
     public AprilTagDetection detectAprilTag(AprilTagDetectionPipeline pipeline) {
