@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 
 @TeleOp
 public class MecanumTeleOp extends LinearOpMode {
@@ -19,20 +21,19 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("bl");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("fr");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("br");
-        DcMotor turretMotor = hardwareMap.dcMotor.get("tm");
-        Servo turretServo = hardwareMap.get(Servo.class, "tr");
+
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
         // See the note about this earlier on this page.
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        Outtake outtake = new Outtake(hardwareMap);
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
@@ -65,15 +66,15 @@ public class MecanumTeleOp extends LinearOpMode {
                 rx *= 0.8;
             }
             if (gamepad1.dpad_up){
-                turretServo.setPosition(0);
-            } else if (gamepad1.dpad_down) {
-                turretServo.setPosition(1);
+
+                outtake.xturret.setPosition(outtake.xturret.getPosition()+.05);
             }
-            if (gamepad1.dpad_right){
-                turretMotor.setPower(0.8);
+            else if (gamepad1.dpad_down){
+
+                outtake.xturret.setPosition(outtake.xturret.getPosition()-.05);
             }
-            else if (gamepad1.dpad_left) {
-                turretMotor.setPower(0);
+            else if (gamepad1.dpad_right){
+                outtake.xturret.setPosition(0.5);
             }
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
