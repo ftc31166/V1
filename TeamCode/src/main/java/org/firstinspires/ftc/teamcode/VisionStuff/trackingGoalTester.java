@@ -35,7 +35,7 @@ public class trackingGoalTester extends LinearOpMode {
     double tagsize = 0.166; // meters (change to your tag size)
 
     // The specific AprilTag ID we want to track
-    int targetTagID = 20;
+    int targetTagID = 24;
 
     @Override
     public void runOpMode() {
@@ -48,7 +48,7 @@ public class trackingGoalTester extends LinearOpMode {
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
         camera.setPipeline(aprilTagDetectionPipeline);
 
-//        panServo = hardwareMap.get(Servo.class, "pan");
+        panServo = hardwareMap.get(Servo.class, "pan");
         tiltServo = hardwareMap.get(Servo.class, "tilt");
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -76,12 +76,9 @@ public class trackingGoalTester extends LinearOpMode {
 
             if (detections.size() > 0) {
                 for (AprilTagDetection tag : detections) {
-                    telemetry.addData("Detected ID", tag.id);
-                    telemetry.addData("Center", "(%.2f, %.2f)", tag.center.x, tag.center.y);
-                    telemetry.addData("Distance (m)", tag.pose.z);
                     if (tag.id == targetTagID) {
                         // Get tag center (in pixels)
-//                        double tagX = tag.center.x;
+                        double tagX = tag.center.x;
                         double tagY = tag.center.y;
 
                         // Screen center
@@ -89,18 +86,18 @@ public class trackingGoalTester extends LinearOpMode {
                         double centerY = 480 / 2.0;
 
                         // Error
-//                        double errorX = tagX - centerX;
+                        double errorX = tagX - centerX;
                         double errorY = tagY - centerY;
 
                         // Adjust servo positions TODO: fix this based on servo turning
-//                        panPos -= errorX * kP;
+                        panPos -= errorX * kP;
                         tiltPos += errorY * kP;
 
                         // Constrain between 0 and 1
-//                        panPos = Math.max(0, Math.min(1, panPos));
+                        panPos = Math.max(0, Math.min(1, panPos));
                         tiltPos = Math.max(0, Math.min(1, tiltPos));
 
-//                        panServo.setPosition(panPos);
+                        panServo.setPosition(panPos);
                         tiltServo.setPosition(tiltPos);
 
                         telemetry.addData("Tracking Tag ID", tag.id);
