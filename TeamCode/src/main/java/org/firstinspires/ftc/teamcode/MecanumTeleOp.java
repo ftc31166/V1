@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 
 @TeleOp
@@ -29,11 +30,12 @@ public class MecanumTeleOp extends LinearOpMode {
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         Outtake outtake = new Outtake(hardwareMap);
+        Intake intake = new Intake(hardwareMap);
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        intake.intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
@@ -76,6 +78,13 @@ public class MecanumTeleOp extends LinearOpMode {
             else if (gamepad1.dpad_right){
                 outtake.xturret.setPosition(0.5);
             }
+            if (gamepad1.a){
+                intake.intake.setPower(-0.7);
+            } else if (gamepad1.b) {
+                intake.intake.setPower(0);
+            }
+
+
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.

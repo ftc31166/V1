@@ -10,6 +10,7 @@ public class MotorTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         DcMotor motor = hardwareMap.get(DcMotor.class,"motor");
+        DcMotor motor1 = hardwareMap.get(DcMotor.class,"motor1");
         ElapsedTime timer = new ElapsedTime();
         if (isStopRequested()) return;
         double power = 0;
@@ -27,6 +28,12 @@ public class MotorTest extends LinearOpMode {
             if(gamepad1.dpad_left && timer.milliseconds()>300){
                 power -= .1;
                 timer.reset();
+            }
+            if (gamepad1.x){
+                motor1.setPower(power);
+            }
+            if (gamepad1.y){
+                motor1.setPower(0);
             }
 
 
