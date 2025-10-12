@@ -26,7 +26,7 @@ public class trackingGoalTester extends LinearOpMode {
     double tiltPos = 0.5;
 
     // Gain factor (adjust sensitivity)
-    double kP = 0.0005;
+    double kP = 0.005;
 
     // Camera intrinsics (approximate for Logitech C270)
     double fx = 600;
