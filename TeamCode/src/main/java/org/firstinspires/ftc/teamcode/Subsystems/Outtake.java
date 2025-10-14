@@ -21,7 +21,7 @@ public class Outtake {
     public Outtake(HardwareMap hardwareMap){
         flywheel1 = hardwareMap.get(DcMotor.class,"fly1");
         xturret = hardwareMap.get(Servo.class, "xtur");
-        yturret = hardwareMap.get(Servo.class, "ytur");
+
     }
     public void trackAprilTag(AprilTagDetection tag) {
         if (tag == null) return; // nothing to track
