@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
@@ -31,6 +33,7 @@ public class MecanumTeleOp extends LinearOpMode {
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         Outtake outtake = new Outtake(hardwareMap);
         Intake intake = new Intake(hardwareMap);
+        ElapsedTime timer = new ElapsedTime();
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -67,26 +70,30 @@ public class MecanumTeleOp extends LinearOpMode {
                 y *= 0.8;
                 rx *= 0.8;
             }
-            if (gamepad1.dpad_up){
 
-                outtake.xturret.setPosition(outtake.xturret.getPosition()+.05);
-            }
-            else if (gamepad1.dpad_down){
-
-                outtake.xturret.setPosition(outtake.xturret.getPosition()-.05);
-            }
-            else if (gamepad1.dpad_right){
-                outtake.xturret.setPosition(0.5);
-            }
             if (gamepad1.a){
                 intake.intake.setPower(-0.7);
             } else if (gamepad1.b) {
                 intake.intake.setPower(0);
             }
-            if (gamepad1.x){
-                outtake.flywheel1.setPower(0.6);
-            } else if (gamepad1.y) {
+
+            if (gamepad2.right_stick_y>0){
+                outtake.flywheel1.setPower(-0.6);
+            } else {
                 outtake.flywheel1.setPower(0);
+            }
+            if (gamepad2.right_trigger>0&&timer.milliseconds()>250){
+
+                outtake.xturret.setPosition(outtake.xturret.getPosition()+.1*gamepad2.right_trigger);
+                timer.reset();
+            }
+            else if (gamepad2.left_trigger>0&&timer.milliseconds()>250){
+
+                outtake.xturret.setPosition(outtake.xturret.getPosition()-.1*gamepad2.left_trigger);
+                timer.reset();
+            }
+            else if (gamepad2.left_bumper){
+                outtake.xturret.setPosition(0.5);
             }
 
             // This button choice was made so that it is hard to hit on accident,

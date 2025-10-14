@@ -14,13 +14,12 @@ public class Outtake {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     public DcMotor flywheel1;
-    public DcMotor flywheel2;
+
     public Servo xturret;
     public Servo yturret;
     public double kP;
     public Outtake(HardwareMap hardwareMap){
         flywheel1 = hardwareMap.get(DcMotor.class,"fly1");
-        flywheel2 = hardwareMap.get(DcMotor.class,"fly2");
         xturret = hardwareMap.get(Servo.class, "xtur");
         yturret = hardwareMap.get(Servo.class, "ytur");
     }
