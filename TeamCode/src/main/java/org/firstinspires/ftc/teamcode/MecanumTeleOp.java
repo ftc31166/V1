@@ -83,7 +83,11 @@ public class MecanumTeleOp extends LinearOpMode {
             } else if (gamepad1.b) {
                 intake.intake.setPower(0);
             }
-
+            if (gamepad1.x){
+                outtake.flywheel1.setPower(0.6);
+            } else if (gamepad1.y) {
+                outtake.flywheel1.setPower(0);
+            }
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
