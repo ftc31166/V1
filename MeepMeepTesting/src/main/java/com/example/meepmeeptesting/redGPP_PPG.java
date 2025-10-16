@@ -13,7 +13,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class redPPG {
+public class redGPP_PPG {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
@@ -23,14 +23,14 @@ public class redPPG {
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-50, 52, Math.toRadians(90)))
                         .strafeTo(new Vector2d(-10,11))
                         .waitSeconds(5)
+                        .setTangent(Math.toRadians(-10))
+                        .splineToConstantHeading(new Vector2d(35,50),Math.toRadians(90))
+                        .strafeTo(new Vector2d(-10,11))
+                        .waitSeconds(5)
                         .strafeTo(new Vector2d(-10,50))
                         .strafeTo(new Vector2d(-10,11))
                         .waitSeconds(5)
-                        .setTangent(0)
-                        .splineToConstantHeading(new Vector2d(10,50),Math.toRadians(90))
-                        .strafeTo(new Vector2d(-10,11))
-                        .waitSeconds(5)
-                        .setTangent(45)
+                        .setTangent(Math.toRadians(45))
                         .splineToConstantHeading(new Vector2d(0,50),Math.toRadians(90))
                         .build());
 
