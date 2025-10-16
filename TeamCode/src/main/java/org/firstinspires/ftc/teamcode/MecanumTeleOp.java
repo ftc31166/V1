@@ -31,6 +31,8 @@ public class MecanumTeleOp extends LinearOpMode {
         // See the note about this earlier on this page.
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         Outtake outtake = new Outtake(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         ElapsedTime timer = new ElapsedTime();
