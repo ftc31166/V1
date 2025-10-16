@@ -22,11 +22,11 @@ public class trackingGoalTester extends LinearOpMode {
 
     Servo panServo, tiltServo;
 
-    double panPos = 0.5;   // Start centered
+    double panPos = 0;   // Start centered
     double tiltPos = 0.5;
 
     // Gain factor (adjust sensitivity)
-    double kP = 0.005;
+    double kP = 0.000001;
 
     // Camera intrinsics (approximate for Logitech C270)
     double fx = 600;

@@ -40,13 +40,9 @@ public class MecanumTeleOp extends LinearOpMode {
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Retrieve the IMU from the hardware map
-        IMU imu = hardwareMap.get(IMU.class, "imu");
+
         // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
+
 
         waitForStart();
 
@@ -56,7 +52,14 @@ public class MecanumTeleOp extends LinearOpMode {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
-
+            if(gamepad1.left_stick_x != 0){
+                frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+                backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            }
+            else{
+                frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            }
             if(gamepad1.left_bumper){
                 y *=.3;
                 x *=.3;
@@ -72,7 +75,7 @@ public class MecanumTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.a){
-                intake.intake.setPower(-0.7);
+                intake.intake.setPower(-0.9);
             } else if (gamepad1.b) {
                 intake.intake.setPower(0);
             }
@@ -84,12 +87,12 @@ public class MecanumTeleOp extends LinearOpMode {
             }
             if (gamepad2.right_trigger>0&&timer.milliseconds()>250){
 
-                outtake.xturret.setPosition(outtake.xturret.getPosition()+.1*gamepad2.right_trigger);
+                outtake.xturret.setPosition(outtake.xturret.getPosition()+.05);
                 timer.reset();
             }
             else if (gamepad2.left_trigger>0&&timer.milliseconds()>250){
 
-                outtake.xturret.setPosition(outtake.xturret.getPosition()-.1*gamepad2.left_trigger);
+                outtake.xturret.setPosition(outtake.xturret.getPosition()-.05);
                 timer.reset();
             }
             else if (gamepad2.left_bumper){
@@ -98,27 +101,11 @@ public class MecanumTeleOp extends LinearOpMode {
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
-            // The equivalent button is start on Xbox-style controllers.
-            if (gamepad1.options) {
-                imu.resetYaw();
-            }
-
-            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
-            // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-
-            rotX = rotX * 1.1;  // Counteract imperfect strafing
-
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio,
-            // but only if at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-            double frontLeftPower = (rotY + rotX + rx) / denominator;
-            double backLeftPower = (rotY - rotX + rx) / denominator;
-            double frontRightPower = (rotY - rotX - rx) / denominator;
-            double backRightPower = (rotY + rotX - rx) / denominator;
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
 
             frontLeftMotor.setPower(frontLeftPower);
             backLeftMotor.setPower(backLeftPower);
