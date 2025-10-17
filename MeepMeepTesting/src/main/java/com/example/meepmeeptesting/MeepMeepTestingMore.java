@@ -53,7 +53,7 @@ public class MeepMeepTestingMore {
                         .build());
 
         Image img = null;
-        try { img = ImageIO.read(new File("/Users/chenchuvsegu/Documents/DECODE (1).png")); }
+        try { img = ImageIO.read(new File("C:\\Users\\User\\Downloads\\decode.png")); }
         catch(IOException e) {}
 
         meepMeep.setBackground(img)

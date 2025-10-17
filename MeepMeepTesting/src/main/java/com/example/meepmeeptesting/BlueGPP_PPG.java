@@ -13,25 +13,25 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class redGPP_PPG {
+public class BlueGPP_PPG {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 18)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-50, 52, Math.toRadians(90)))
-                        .strafeTo(new Vector2d(-10,11))
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-50, -52, Math.toRadians(90)))
+                        .strafeTo(new Vector2d(-10,-11))
                         .waitSeconds(5)
-                        .setTangent(Math.toRadians(-10))
-                        .splineToConstantHeading(new Vector2d(35,50),Math.toRadians(90))
-                        .strafeTo(new Vector2d(-10,11))
+                        .setTangent(Math.toRadians(10))
+                        .splineToConstantHeading(new Vector2d(35,-50),Math.toRadians(90))
+                        .strafeTo(new Vector2d(-10,-11))
                         .waitSeconds(5)
-                        .strafeTo(new Vector2d(-10,50))
-                        .strafeTo(new Vector2d(-10,11))
+                        .strafeTo(new Vector2d(-10,-50))
+                        .strafeTo(new Vector2d(-10,-11))
                         .waitSeconds(5)
-                        .setTangent(Math.toRadians(45))
-                        .splineToConstantHeading(new Vector2d(0,50),Math.toRadians(90))
+                        .setTangent(Math.toRadians(-45))
+                        .splineToConstantHeading(new Vector2d(0,-50),Math.toRadians(90))
                         .build());
 
         Image img = null;
