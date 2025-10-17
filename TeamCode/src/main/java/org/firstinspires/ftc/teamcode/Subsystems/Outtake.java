@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.openftc.apriltag.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.List;
 
@@ -14,42 +17,38 @@ public class Outtake {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     public DcMotor flywheel1;
+    double fx = 600;
+    double fy = 600;
+    double cx = 320;
+    double cy = 240;
 
+    double tagsize = 0.166;
     public Servo xturret;
     public Servo yturret;
     public double kP;
     public Outtake(HardwareMap hardwareMap){
         flywheel1 = hardwareMap.get(DcMotor.class,"fly1");
         xturret = hardwareMap.get(Servo.class, "xtur");
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
+        camera = OpenCvCameraFactory.getInstance().createWebcam(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        camera.setPipeline(aprilTagDetectionPipeline);
     }
-    public void trackAprilTag(AprilTagDetection tag) {
-        if (tag == null) return; // nothing to track
 
-        // Image center (assuming 640x480)
-        double centerX = 320;
-        double centerY = 240;
-
-        // Calculate error from center
-        double errorX = tag.center.x - centerX;
-        double errorY = tag.center.y - centerY;
-
-        // Update servo positions (0.0 to 1.0)
-        double newPan = xturret.getPosition() - errorX * kP;
-        double newTilt = yturret.getPosition() + errorY * kP;
-
-        // Clamp positions to 0-1 range
-        newPan = Math.max(0, Math.min(1, newPan));
-        newTilt = Math.max(0, Math.min(1, newTilt));
-
-        xturret.setPosition(newPan);
-        yturret.setPosition(newTilt);
-    }
-    public AprilTagDetection detectAprilTag(AprilTagDetectionPipeline pipeline) {
-        List<AprilTagDetection> detections = pipeline.getDetectionsUpdate();
-        if (detections != null && !detections.isEmpty()) {
-            return detections.get(0); // return first tag
+    public void detectAprilTag() {
+        ElapsedTime timer = new ElapsedTime();
+        List<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
+        while (timer.milliseconds() < 1000){
+            if (detections != null && !detections.isEmpty()) {
+                Constants.tagID = detections.get(0).id;
+                break;
+            }
         }
-        return null; // no tag detected
+
+
     }
 }

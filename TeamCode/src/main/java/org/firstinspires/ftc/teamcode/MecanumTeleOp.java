@@ -54,14 +54,7 @@ public class MecanumTeleOp extends LinearOpMode {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
-            if(gamepad1.left_stick_x != 0){
-                frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-                backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            }
-            else{
-                frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-                backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            }
+
             if(gamepad1.left_bumper){
                 y *=.3;
                 x *=.3;
