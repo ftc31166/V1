@@ -38,14 +38,13 @@ public class blue extends LinearOpMode {
 
 
 
-        TrajectoryActionBuilder GPP_PPG = drive.actionBuilder(new Pose2d(-10,11,Math.toRadians(90)))
+        TrajectoryActionBuilder GPP_PPG = drive.actionBuilder(new Pose2d(-10,-11,Math.toRadians(90)))
                 .stopAndAdd(robot.intakeOn())
-                .strafeTo(new Vector2d(-10,-11))
                 .setTangent(Math.toRadians(-10))
                 .splineToConstantHeading(new Vector2d(35,50),Math.toRadians(90))
-                .strafeTo(new Vector2d(-11,-11))
                 .stopAndAdd(new SleepAction(1))
                 .stopAndAdd(robot.intakeOff())
+                .strafeTo(new Vector2d(-10,-11))
                 .stopAndAdd(robot.shooterOn())
                 .stopAndAdd(new SleepAction(2))
                 .stopAndAdd(robot.shooterOff())
@@ -59,13 +58,12 @@ public class blue extends LinearOpMode {
                 .stopAndAdd(robot.shooterOff())
                 .setTangent(Math.toRadians(45))
                 .splineToConstantHeading(new Vector2d(0,-50),Math.toRadians(90));
-        TrajectoryActionBuilder PGP= drive.actionBuilder(new Pose2d(-10,11,Math.toRadians(90)))
+        TrajectoryActionBuilder PGP= drive.actionBuilder(new Pose2d(-10,-11,Math.toRadians(90)))
                 .stopAndAdd(robot.intakeOn())
-                .strafeTo(new Vector2d(-10,-11))
-                .stopAndAdd(new SleepAction(1))
                 .strafeTo(new Vector2d(-10,-50))
-                .strafeTo(new Vector2d(-10,-11))
+                .stopAndAdd(new SleepAction(1))
                 .stopAndAdd(robot.intakeOff())
+                .strafeTo(new Vector2d(-10,-11))
                 .stopAndAdd(robot.shooterOn())
                 .stopAndAdd(new SleepAction(2))
                 .stopAndAdd(robot.shooterOff())
