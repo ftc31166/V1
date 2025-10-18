@@ -6,6 +6,8 @@ public class Constants {
         public static final double shootSpeed = .5;
         public static final double yTurretMax = 0.25;//lowest angle
         public static final double yTurretMin = .85;//highest angle
+        public static  final double KICKERSTART = 0.9;
+        public static  final double KICKERFINAL = 0.5;
 
     }
 }
