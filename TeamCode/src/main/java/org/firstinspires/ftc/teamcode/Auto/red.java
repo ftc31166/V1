@@ -87,7 +87,7 @@ public class red extends LinearOpMode {
 
 
         // actions that need to happen on init; for instance, a claw tightening.
-
+        Actions.runBlocking(robot.setServo(.25));
         waitForStart();
 
         if (isStopRequested()) return;

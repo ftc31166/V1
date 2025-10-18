@@ -80,7 +80,7 @@ public class blue extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(0,-50),Math.toRadians(-90));
 
         // actions that need to happen on init; for instance, a claw tightening.
-
+        Actions.runBlocking(robot.setServo(.25));
         waitForStart();
 
         if (isStopRequested()) return;

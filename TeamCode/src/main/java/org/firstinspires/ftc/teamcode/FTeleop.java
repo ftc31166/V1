@@ -16,6 +16,15 @@ import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 
 @TeleOp
 public class FTeleop extends LinearOpMode {
+    public enum shootState{
+        FLYWHEEL_ON,
+        FLYWHEEL_OFF,
+        INTAKE_ON,
+        KICKER_KICK,
+        INTAKE_OFF,
+
+    }
+    shootState shoot = shootState.FLYWHEEL_OFF;
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -36,6 +45,7 @@ public class FTeleop extends LinearOpMode {
         Outtake outtake = new Outtake(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         ElapsedTime timer = new ElapsedTime();
+        ElapsedTime flywheelTimer = new ElapsedTime();
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -73,17 +83,7 @@ public class FTeleop extends LinearOpMode {
                 rx *= 0.8;
             }
 
-            if (gamepad1.a){
-                intake.intake.setPower(-0.9);
-            } else if (gamepad1.b) {
-                intake.intake.setPower(0);
-            }
 
-            if (gamepad2.right_stick_y>0){
-                outtake.flywheel1.setPower(-0.6);
-            } else {
-                outtake.flywheel1.setPower(0);
-            }
             if (gamepad2.right_trigger>0&&timer.milliseconds()>250){
 
                 outtake.xturret.setPosition(outtake.xturret.getPosition()+.05);
@@ -94,9 +94,7 @@ public class FTeleop extends LinearOpMode {
                 outtake.xturret.setPosition(outtake.xturret.getPosition()-.05);
                 timer.reset();
             }
-            else if (gamepad2.left_bumper){
-                outtake.xturret.setPosition(0.5);
-            }
+
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
@@ -104,6 +102,33 @@ public class FTeleop extends LinearOpMode {
             if (gamepad1.options) {
                 imu.resetYaw();
             }
+            switch (shoot){
+                case FLYWHEEL_OFF:
+                    intake.gate.setPosition(.9);
+                    outtake.flywheel1.setPower(0);
+                    if(gamepad2.right_bumper){
+                        timer.reset();
+                        shoot = shootState.FLYWHEEL_ON;
+                    }
+                case FLYWHEEL_ON:
+                    outtake.flywheel1.setPower(-.7);
+                    if(timer.milliseconds()>1000){
+                        shoot = shootState.INTAKE_ON;
+                    }
+
+                case INTAKE_ON:
+                    intake.intake.setPower(-.9);
+                    if(timer.milliseconds()>500){
+                        shoot = shootState.KICKER_KICK;
+                    }
+                case KICKER_KICK:
+                    intake.gate.setPosition(.5);
+                    intake.intake.setPower(0);
+                    if(timer.milliseconds() > 200){
+                        shoot = shootState.FLYWHEEL_OFF;
+                    }
+            }
+            
 
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
