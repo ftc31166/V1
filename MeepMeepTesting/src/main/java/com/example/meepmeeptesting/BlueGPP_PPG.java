@@ -30,7 +30,7 @@ public class BlueGPP_PPG {
                         .strafeTo(new Vector2d(-11,-50))
                         .strafeTo(new Vector2d(-11,-11))
                         .waitSeconds(5)
-                        .setTangent(Math.toRadians(-45))
+                        .setTangent(Math.toRadians(45))
                         .splineToConstantHeading(new Vector2d(0,-50),Math.toRadians(-90))
                         .build());
 
