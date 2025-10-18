@@ -21,7 +21,6 @@ public class FTeleop extends LinearOpMode {
         FLYWHEEL_OFF,
         INTAKE_ON,
         KICKER_KICK,
-        INTAKE_OFF,
 
     }
     shootState shoot = shootState.FLYWHEEL_OFF;
@@ -38,6 +37,7 @@ public class FTeleop extends LinearOpMode {
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
         // See the note about this earlier on this page.
+        boolean far=false;
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -45,7 +45,7 @@ public class FTeleop extends LinearOpMode {
         Outtake outtake = new Outtake(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         ElapsedTime timer = new ElapsedTime();
-        ElapsedTime flywheelTimer = new ElapsedTime();
+        ElapsedTime shootTimer = new ElapsedTime();
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -99,38 +99,60 @@ public class FTeleop extends LinearOpMode {
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
-            if (gamepad1.options) {
+            if (gamepad1.start) {
                 imu.resetYaw();
             }
             switch (shoot){
                 case FLYWHEEL_OFF:
-                    intake.gate.setPosition(.9);
+                    intake.gate.setPosition(0.9);
                     outtake.flywheel1.setPower(0);
-                    if(gamepad2.right_bumper){
-                        timer.reset();
+                    if (gamepad2.x) {
+                        far = false;
+                        shootTimer.reset();
+
                         shoot = shootState.FLYWHEEL_ON;
                     }
+                    if (gamepad2.y) {
+                        far = true;
+                        shootTimer.reset();
+                        shoot = shootState.FLYWHEEL_ON;
+                    }
+                    break;
+
                 case FLYWHEEL_ON:
-                    outtake.flywheel1.setPower(-.7);
-                    if(timer.milliseconds()>1000){
+                    if(!far){
+                        outtake.yturret.setPosition(0);
+                        outtake.flywheel1.setPower(-0.7);
+                    }else {
+                       outtake.yturret.setPosition(0.5);
+                       outtake.flywheel1.setPower(-0.9);
+                   }
+
+                    if (shootTimer.milliseconds() > 2000) {
+                        shootTimer.reset();
                         shoot = shootState.INTAKE_ON;
                     }
+                    break;
 
                 case INTAKE_ON:
-                    intake.intake.setPower(-.9);
-                    if(timer.milliseconds()>500){
+                    intake.intake.setPower(-0.9);
+                    if (shootTimer.milliseconds() > 1000) {
+                        shootTimer.reset();
                         shoot = shootState.KICKER_KICK;
                     }
+                    break;
+
                 case KICKER_KICK:
-                    intake.gate.setPosition(.5);
+                    intake.gate.setPosition(0.5);
                     intake.intake.setPower(0);
-                    if(timer.milliseconds() > 200){
+                    if (shootTimer.milliseconds() > 1000) {
                         shoot = shootState.FLYWHEEL_OFF;
                     }
+                    break;
             }
 
             if (gamepad1.a){
-                intake.intake.setPower(-0.9);
+                intake.intake.setPower(-0.7);
             }
             if (gamepad1.b){
                 intake.intake.setPower(0);

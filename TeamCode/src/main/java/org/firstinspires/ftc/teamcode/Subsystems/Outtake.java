@@ -14,8 +14,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import java.util.List;
 
 public class Outtake {
-    OpenCvCamera camera;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+//    OpenCvCamera camera;
+//    AprilTagDetectionPipeline aprilTagDetectionPipeline;
     public DcMotor flywheel1;
     double fx = 600;
     double fy = 600;
@@ -29,26 +29,27 @@ public class Outtake {
     public Outtake(HardwareMap hardwareMap){
         flywheel1 = hardwareMap.get(DcMotor.class,"fly1");
         xturret = hardwareMap.get(Servo.class, "xtur");
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-        camera = OpenCvCameraFactory.getInstance().createWebcam(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
-        camera.setPipeline(aprilTagDetectionPipeline);
+        yturret = hardwareMap.get(Servo.class, "ytur");
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+//                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//
+//        camera = OpenCvCameraFactory.getInstance().createWebcam(
+//                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+//
+//        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+//        camera.setPipeline(aprilTagDetectionPipeline);
     }
 
-    public void detectAprilTag() {
-        ElapsedTime timer = new ElapsedTime();
-        List<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
-        while (timer.milliseconds() < 1000){
-            if (detections != null && !detections.isEmpty()) {
-                Constants.tagID = detections.get(0).id;
-                break;
-            }
-        }
-
-
-    }
+//    public void detectAprilTag() {
+//        ElapsedTime timer = new ElapsedTime();
+//        List<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
+//        while (timer.milliseconds() < 1000){
+//            if (detections != null && !detections.isEmpty()) {
+//                Constants.tagID = detections.get(0).id;
+//                break;
+//            }
+//        }
+//
+//
+//    }
 }
