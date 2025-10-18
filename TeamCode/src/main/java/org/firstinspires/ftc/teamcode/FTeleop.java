@@ -128,7 +128,13 @@ public class FTeleop extends LinearOpMode {
                         shoot = shootState.FLYWHEEL_OFF;
                     }
             }
-            
+
+            if (gamepad1.a){
+                intake.intake.setPower(-0.9);
+            }
+            if (gamepad1.b){
+                intake.intake.setPower(0);
+            }
 
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
